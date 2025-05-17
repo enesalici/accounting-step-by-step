@@ -30,14 +30,19 @@ export async function createFakeData() {
   }
 
   const expenseType = types.find((t) => t.title === "expense")!;
+  const incomeType = types.find((t) => t.title === "income")!;
 
   // 2. TransactionCategory
   const categoriesData = [
-    { title: "yemek", typeId: expenseType._id },
-    { title: "kira", typeId: expenseType._id },
-    { title: "internet", typeId: expenseType._id },
+    { title: "pos geliri", typeId: incomeType._id },
+    { title: "havale geliri", typeId: incomeType._id },
+    { title: "nakit geliri", typeId: incomeType._id },
+    { title: "kantin geliri", typeId: incomeType._id },
+    { title: "yemek giderleri", typeId: expenseType._id },
+    { title: "kira giderleri", typeId: expenseType._id },
     { title: "faturalar", typeId: expenseType._id },
     { title: "Öğretmen maaş giderleri", typeId: expenseType._id },
+    { title: "iadeler", typeId: expenseType._id },
   ];
 
   const categories = [];
