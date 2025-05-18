@@ -29,7 +29,6 @@ export async function createTransactionCategory(data: {
     const newCategory = new TransactionCategory(data);
     return await newCategory.save();
   } catch (error) {
-    if (error instanceof ApiError) throw error;
     throw new ApiError(500, "TransactionCategory oluşturulamadı: " + error);
   }
 }
@@ -49,7 +48,6 @@ export async function updateTransactionCategory(
       throw new ApiError(404, "TransactionCategory bulunamadı");
     return updatedCategory;
   } catch (error) {
-    if (error instanceof ApiError) throw error;
     throw new ApiError(500, "TransactionCategory güncellenemedi: " + error);
   }
 }
@@ -61,7 +59,6 @@ export async function deleteTransactionCategory(id: string) {
     if (!deleted) throw new ApiError(404, "TransactionCategory bulunamadı");
     return deleted;
   } catch (error) {
-    if (error instanceof ApiError) throw error;
     throw new ApiError(500, "TransactionCategory silinemedi: " + error);
   }
 }
