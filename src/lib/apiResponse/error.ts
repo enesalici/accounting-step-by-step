@@ -1,27 +1,29 @@
 import { NextResponse } from "next/server";
 
-export function apiError400() {
+//invalid req
+export function apiError400(message: string) {
   return NextResponse.json(
     {
       status: 400,
       success: false,
-      message: "invalid request",
+      message,
     },
     { status: 400 }
   );
 }
 
-export function apiError404() {
+//notFound req
+export function apiError404(message: string) {
   return NextResponse.json(
     {
       status: 404,
       success: false,
-      message: "Not Found",
+      message,
     },
     { status: 404 }
   );
 }
-
+//unAuthorization req
 export function apiError401() {
   return NextResponse.json(
     {
@@ -32,29 +34,14 @@ export function apiError401() {
     { status: 401 }
   );
 }
-  
-
-
-export function apiError403() {
-  return NextResponse.json(
-    {
-      status: 403,
-      success: false,
-      message: "Access denied",
-    },
-    { status: 403 }
-  );
-}
-
-
-
-export function apiError500(data: unknown) {
+//server error
+export function apiError500(details: unknown) {
   return NextResponse.json(
     {
       status: 500,
       success: false,
-      message: "User error :)",
-      details: data,
+      message: "Sunucu hatası",
+      details,
     },
     { status: 500 }
   );

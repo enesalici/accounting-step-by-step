@@ -1,12 +1,15 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface ITransactionType extends Document {
-  title: string; 
+  title: string;
 }
 
-const TransactionTypeSchema = new Schema<ITransactionType>({
-  title: { type: String, required: true }, 
-});
+const TransactionTypeSchema = new Schema<ITransactionType>(
+  {
+    title: { type: String, required: true },
+  },
+  { timestamps: { createdAt: "createdDateAt", updatedAt: "updatedDateAt" } }
+);
 
 const TransactionType =
   mongoose.models.TransactionType ||

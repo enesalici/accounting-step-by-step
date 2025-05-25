@@ -1,35 +1,38 @@
-import { apiError400, apiError404, apiError500 } from "@/lib/apiResponse/error";
+import { apiError500 } from "@/lib/apiResponse/error";
 import { apiResponse200 } from "@/lib/apiResponse/success";
-import {
-  deleteTransactionCategory,
-  updateTransactionCategory,
-} from "@/services/transactionCategory/service";
+import { connectDB } from "@/lib/data/mongoDb";
+import { ensureExists } from "@/lib/existing/ensureExists";
+import TransactionCategory from "@/models/TransactionCategory";
+import TransactionType from "@/models/TransactionType";
 import { NextRequest } from "next/server";
 
 
+// id from params @@ params : id
 export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
-    
-    if (!id) {
-      return apiError400();
-    }
+    await connectDB();
 
-    const deleted = await deleteTransactionCategory(id);
-
-    if (!deleted) {
-      return apiError404();
-    }
+    const deleted = await ensureExists(
+      TransactionCategory.findByIdAndDelete(id),
+      "Silinecek kategori bulunamadı"
+    )
 
     return apiResponse200(deleted);
   } catch (err) {
+    if (err instanceof Response) return err;
     return apiError500(err);
   }
 }
 
+//______________________________________________________________________________________
+
+
+// id from params @@ params : id 
+// data from body @@ data : title, typeId
 export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -37,16 +40,25 @@ export async function PUT(
   try {
     const { id } = await params;
     const data = await req.json();
+    await connectDB();
 
-    if (!id) return apiError400();
-    if (!data || Object.keys(data).length === 0) return apiError400();
+    if (data.typeId) {
+      await ensureExists(
+        TransactionType.findById(data.typeId),
+        "Geçersiz typeId: TransactionType bulunamadı"
+      );
+    }
 
-    const updated = await updateTransactionCategory(id, data);
-
-    if (!updated) return apiError404();
+   const updated = await ensureExists(
+     TransactionCategory.findByIdAndUpdate(id, data, {
+       new: true,
+     }),
+     "Güncellenecek Transaction Category kategori bulunamadı"
+   );
 
     return apiResponse200(updated);
   } catch (err) {
+    if (err instanceof Response) return err;
     return apiError500(err);
   }
 }

@@ -1,21 +1,24 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
 
 export interface ITransactionCategory extends Document {
-  title: string; 
-  typeId: Types.ObjectId; 
+  title: string;
+  typeId: Types.ObjectId;
 }
 
-const TransactionCategorySchema = new Schema<ITransactionCategory>({
-  title: {
-    type: String,
-    required: true,
+const TransactionCategorySchema = new Schema<ITransactionCategory>(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    typeId: {
+      type: Schema.Types.ObjectId,
+      ref: "TransactionType",
+      required: true,
+    },
   },
-  typeId: {
-    type: Schema.Types.ObjectId,
-    ref: "TransactionType",
-    required: true,
-  },
-});
+  { timestamps: { createdAt: "createdDateAt", updatedAt: "updatedDateAt" } }
+);
 
 const TransactionCategory =
   mongoose.models.TransactionCategory ||

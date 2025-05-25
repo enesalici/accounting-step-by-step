@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
 
-export type ITransaction = Document & {
+export interface ITransaction extends Document {
   title: string;
   amount: number;
   userId: Types.ObjectId;
@@ -14,12 +14,12 @@ const TransactionSchema = new Schema<ITransaction>(
   {
     title: { type: String, required: true },
     amount: { type: Number, required: true },
+    description: { type: String },
     categoryId: {
       type: Schema.Types.ObjectId,
       ref: "TransactionCategory",
       required: true,
     },
-    description: { type: String },
     userId: {
       type: Schema.Types.ObjectId,
       ref: "User",
