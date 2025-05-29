@@ -1,0 +1,19 @@
+.loginPage{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginBox{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 24%;
+    height: 700px;
+}
+
+
+.items{
+    margin-top: 10px;
+}

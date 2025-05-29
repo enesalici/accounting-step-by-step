@@ -8,7 +8,7 @@ const TransactionTypeSchema = new Schema<ITransactionType>(
   {
     title: { type: String, required: true },
   },
-  { timestamps: { createdAt: "createdDateAt", updatedAt: "updatedDateAt" } }
+  
 );
 
 const TransactionType =

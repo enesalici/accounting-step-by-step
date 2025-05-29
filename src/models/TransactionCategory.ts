@@ -17,7 +17,7 @@ const TransactionCategorySchema = new Schema<ITransactionCategory>(
       required: true,
     },
   },
-  { timestamps: { createdAt: "createdDateAt", updatedAt: "updatedDateAt" } }
+  
 );
 
 const TransactionCategory =

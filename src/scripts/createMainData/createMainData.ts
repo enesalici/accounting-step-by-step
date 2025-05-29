@@ -15,7 +15,7 @@ export async function createFakeData() {
 
   try { 
     // 1. TransactionType
-  const typesData = ["income", "expense"];
+  const typesData = ["Gelir", "Gider"];
   const types = [];
   for (const title of typesData) {
     let t = await TransactionType.findOne({ title });
@@ -29,8 +29,8 @@ export async function createFakeData() {
     types.push(t);
   }
 
-  const expenseType = types.find((t) => t.title === "expense")!;
-  const incomeType = types.find((t) => t.title === "income")!;
+  const expenseType = types.find((t) => t.title === "Gider")!;
+  const incomeType = types.find((t) => t.title === "Gelir")!;
 
   // 2. TransactionCategory
   const categoriesData = [
@@ -38,11 +38,15 @@ export async function createFakeData() {
     { title: "havale geliri", typeId: incomeType._id },
     { title: "nakit geliri", typeId: incomeType._id },
     { title: "kantin geliri", typeId: incomeType._id },
-    { title: "yemek giderleri", typeId: expenseType._id },
-    { title: "kira giderleri", typeId: expenseType._id },
-    { title: "faturalar", typeId: expenseType._id },
-    { title: "Öğretmen maaş giderleri", typeId: expenseType._id },
-    { title: "iadeler", typeId: expenseType._id },
+    { title: "Yemek Gideri", typeId: expenseType._id },
+    { title: "Kira Gideri", typeId: expenseType._id },
+    { title: "Öğretmen Maaş Gideri", typeId: expenseType._id },
+    { title: "İade Gideri", typeId: expenseType._id },
+    { title: "Elektrik Faturası", typeId: expenseType._id },
+    { title: "Doğalgaz Faturası", typeId: expenseType._id },
+    { title: "Su Faturası", typeId: expenseType._id },
+    { title: "İnternet Faturası", typeId: expenseType._id },
+    { title: "Telefon Faturası", typeId: expenseType._id },
   ];
 
   const categories = [];
@@ -58,36 +62,36 @@ export async function createFakeData() {
     categories.push(c);
   }
   
-  const faturalarCategory = categories.find((c) => c.title === "faturalar");
-  // 3. InvoiceTransaction
-  const invoiceData = [
-    { title: "elektrik faturası", typeId: faturalarCategory?._id },
-    { title: "su faturası", typeId: faturalarCategory?._id },
-    { title: "doğalgaz faturası", typeId: faturalarCategory?._id },
-    { title: "internet faturası", typeId: faturalarCategory?._id },
-    { title: "telefon faturası", typeId: faturalarCategory?._id },
-  ];
+  // const faturalarCategory = categories.find((c) => c.title === "faturalar");
+  // // 3. InvoiceTransaction
+  // const invoiceData = [
+  //   { title: "elektrik faturası", typeId: faturalarCategory?._id },
+  //   { title: "su faturası", typeId: faturalarCategory?._id },
+  //   { title: "doğalgaz faturası", typeId: faturalarCategory?._id },
+  //   { title: "internet faturası", typeId: faturalarCategory?._id },
+  //   { title: "telefon faturası", typeId: faturalarCategory?._id },
+  // ];
 
-  for (const invoice of invoiceData) {
-    let i = await InvoiceTransaction.findOne({ title: invoice.title });
-    if (!i) {
-      i = new InvoiceTransaction(invoice);
-      await i.save();
-      console.log(`InvoiceTransaction oluşturuldu: ${invoice.title}`);
-    } else {
-      console.log(`InvoiceTransaction zaten var: ${invoice.title}`);
-    }
-  }
+  // for (const invoice of invoiceData) {
+  //   let i = await InvoiceTransaction.findOne({ title: invoice.title });
+  //   if (!i) {
+  //     i = new InvoiceTransaction(invoice);
+  //     await i.save();
+  //     console.log(`InvoiceTransaction oluşturuldu: ${invoice.title}`);
+  //   } else {
+  //     console.log(`InvoiceTransaction zaten var: ${invoice.title}`);
+  //   }
+  // }
 
   // 4. User
   let user = await User.findOne({ email: "enes@mail.com" });
   if (!user) {
     user = new User({
-      firstname: "Enes",
-      lastname: "Alıcı",
-      email: "enes@mail.com",
-      passwordHash: "123",
-      passwordSalt: "123",
+      firstname: "admin",
+      lastname: "admin",
+      email: "admin@mail.com",
+      passwordHash: "mrl.788547",
+      passwordSalt: "mrl.788547",
     });
     await user.save();
     console.log("User oluşturuldu.");
@@ -101,6 +105,7 @@ export async function createFakeData() {
   if (!transaction) {
     transaction = new Transaction({
       title: "Örnek Transaction",
+      description: "örnek açıklama",
       userId: user._id,
       categoryId: sampleCategory._id,
       amount: 100,

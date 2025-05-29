@@ -17,8 +17,7 @@ const InvoiceCategorySchema = new Schema<IInvoiceCategory>(
       ref: "TransactionCategory",
       required: true,
     },
-  },
-  { timestamps: { createdAt: "createdDateAt", updatedAt: "updatedDateAt" } }
+  }
 );
 
 const InvoiceCategory =
