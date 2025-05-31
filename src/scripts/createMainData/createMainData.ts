@@ -38,6 +38,7 @@ export async function createFakeData() {
     { title: "havale geliri", typeId: incomeType._id },
     { title: "nakit geliri", typeId: incomeType._id },
     { title: "kantin geliri", typeId: incomeType._id },
+    { title: "kantin gideri", typeId: expenseType._id },
     { title: "Yemek Gideri", typeId: expenseType._id },
     { title: "Kira Gideri", typeId: expenseType._id },
     { title: "Öğretmen Maaş Gideri", typeId: expenseType._id },
