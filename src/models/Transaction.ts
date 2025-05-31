@@ -23,7 +23,8 @@ const TransactionSchema = new Schema<ITransaction>(
     userId: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: false,
+      
     },
   },
   { timestamps: { createdAt: "createdDateAt", updatedAt: "updatedDateAt" } }

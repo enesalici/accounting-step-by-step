@@ -1,46 +1,81 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+"use client";
+
 import CollapsibleTable from "@/components/CollapsibleTable/CollapsibleTable";
 import style from "./style.module.css";
+import AddTransactionForm from "@/components/transactionForms/addTransactionForm";
+import { useAppData } from "@/context/appDataContext"
+import { useState, useTransition, useEffect } from "react";
+import { Box, Button, Container } from "@mui/material";
+import { deleteTransaction } from "@/components/transactionForms/actions";
+import { useRouter } from "next/navigation";
+import LogoutIcon from '@mui/icons-material/Logout';
 
-// id
-// tittle
-// amount
-// categoryId
-// userId
-// createdDateAt
-// updatedDateAt
 
+export default function DashboardPage() {
+    const [open, setOpen] = useState(false);
+    const { transactions, users, transactionCategories, transactionTypes, setTransactions } = useAppData();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [isPending, startTransition] = useTransition();
+    const router = useRouter();
 
-export default async function DashboardPage() {
-      
-    // TRANSACTION
-    const TransactionRes = await fetch('http://localhost:3000/api/transaction');
-    const Transactionjson = await TransactionRes.json();
-    const Transactiondata = Transactionjson.details;
-    console.log(Transactiondata);
+    useEffect(() => {
+        const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+        if (!isLoggedIn) {
+            router.push('/');
+        }
+    }, []);
 
-    //TRANSACTION CATEGORY
-    const TransactionCategoryRes = await fetch('http://localhost:3000/api/transaction-category');
-    const TransactionCategoryjson = await TransactionCategoryRes.json();
-    const TransactionCategorydata = TransactionCategoryjson.details;
-    console.log(TransactionCategorydata);
+    const handleDeleteTransaction = (_id: string) => {
+        startTransition(async () => {
+            const result = await deleteTransaction(_id);
+            if (result.success) {
+                setTransactions(prev => prev.filter(t => t._id !== _id));
+            } else {
+                alert("Silme işlemi başarısız: " + result.error);
+            }
+        });
+    };
 
-    //TRANSACTION TYPE
-    const TransactionTypeRes = await fetch('http://localhost:3000/api/transaction-type');
-    const TransactionTypejson = await TransactionTypeRes.json();
-    const TransactionTypedata = TransactionTypejson.details;
-    console.log(TransactionTypedata);
-
-    const user = await fetch('http://localhost:3000/api/user');
-    const userJson = await user.json();
-    const userdata = userJson.details;
-    console.log(userdata);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleAddTransaction = (newTransaction: any) => {
+        setTransactions(prev => [...prev, newTransaction]);
+    };
 
     return (
-        
-        <div className={style.section}>
-        
-            <CollapsibleTable rows={Transactiondata} categories={TransactionCategorydata} types={TransactionTypedata} users={userdata} />
+        <Container className={style.section}>
 
-        </div>
-      );
+            <Box style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
+                <Button
+                    variant="outlined"
+                    color="error"
+                    startIcon={<LogoutIcon />}
+                    onClick={() => {
+                        sessionStorage.removeItem("isLoggedIn");
+                        window.location.href = '/';
+                    }}
+                >
+                    Çıkış Yap
+                </Button>
+            </Box>
+
+            <div className={style.tableBox}>
+                <CollapsibleTable
+                    rows={transactions}
+                    categories={transactionCategories}
+                    types={transactionTypes}
+                    users={users}
+                    onDelete={handleDeleteTransaction}
+                    openedCreate={setOpen}
+                />
+            </div>
+
+            <AddTransactionForm
+                open={open}
+                setOpen={setOpen}
+                categories={transactionCategories}
+                onSuccess={handleAddTransaction}
+            />
+        </Container>
+    );
 }

@@ -4,7 +4,6 @@ import { connectDB } from "@/lib/data/mongoDb";
 import { ensureExists } from "@/lib/existing/ensureExists";
 import Transaction from "@/models/Transaction";
 import TransactionCategory from "@/models/TransactionCategory";
-import User from "@/models/User";
 import { NextRequest } from "next/server";
 
 // id from @@ params: id
@@ -23,9 +22,6 @@ export async function PUT(
     const data = await req.json();
     const { title, amount, description, categoryId, userId } = data;
 
-    if (!id || !title?.trim() || !amount || !categoryId || !userId) {
-      return apiError400("Zorunlu alanları lütfen doldurunuz");
-    }
 
     await connectDB();
 
@@ -33,7 +29,6 @@ export async function PUT(
       TransactionCategory.findById(categoryId),
       "Geçersiz kategori ID'si"
     );
-    await ensureExists(User.findById(userId), "Geçersiz kullanıcı ID'si");
 
     await ensureExists(Transaction.findById(id), "Transaction bulunamadı");
 

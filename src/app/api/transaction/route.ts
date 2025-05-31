@@ -4,7 +4,7 @@ import { connectDB } from "@/lib/data/mongoDb";
 import { ensureExists } from "@/lib/existing/ensureExists";
 import Transaction from "@/models/Transaction";
 import TransactionCategory from "@/models/TransactionCategory";
-import User from "@/models/User";
+// import User from "@/models/User";
 import { NextRequest } from "next/server";
 
 // data
@@ -40,13 +40,13 @@ export async function POST(req: NextRequest) {
     const { title, amount, categoryId, description, userId } = data;
 
     // Zorunlu alanlar kontrolü
-    if (!title?.trim() || !amount || !categoryId || !userId) {
+    if (!title?.trim() || !amount || !categoryId ) {
       return apiError400("Zorunlu alanlar eksik");
     }
 
     await connectDB();
 
-    await ensureExists(User.findById(userId), "Geçersiz kullanıcı ID'si");
+    // await ensureExists(User.findById(userId), "Geçersiz kullanıcı ID'si");
 
     await ensureExists(
       TransactionCategory.findById(categoryId),
